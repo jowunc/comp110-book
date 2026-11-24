@@ -2,10 +2,12 @@
 
 Justin Owusu’s mentored research project at UNC–Chapel Hill explores what a program can infer from the timing of a shared memory access.
 
+**[Visit the live COMP 495 site](https://jowunc.github.io/comp110-book/)**
+
 ## Explore the project
 
-- **FLUSH+RELOAD lesson** explains why the observer flushes a shared line and how to interpret its reload time. Step through a C example or edit and run it to compare a hit with a miss.
-- **Cache Quest** visualizes the observer, victim and cache through four phases. Revisit a phase on the timeline or use the challenge mode to infer the victim’s access.
+- [**FLUSH+RELOAD lesson**](https://jowunc.github.io/comp110-book/flush-reload/) explains why the observer flushes a shared line and how to interpret its reload time. Step through a C example or edit and run it to compare a hit with a miss.
+- [**Cache Quest**](https://jowunc.github.io/comp110-book/cache-quest.html) visualizes the observer, victim and cache through four phases. Revisit a phase on the timeline or use the challenge mode to infer the victim’s access.
 - **Timing model** uses illustrative values of 42 cycles for a hit and 186 for a miss, with a 100-cycle decision threshold. Reload latency and cumulative simulated cycles are displayed separately.
 
 A Spectre lesson is planned.

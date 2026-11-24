@@ -8,7 +8,7 @@ description: An interactive, game-like FLUSH+RELOAD cache side-channel simulator
 
 # FLUSH+RELOAD Simulator
 
-[Open the full-width lab](../cache-quest.html), or use the controls below to explore how cache timing can reveal whether a victim accessed a monitored memory location.
+[Open the full-width lab](cache-quest.html), or use the controls below to explore how cache timing can reveal whether a victim accessed a monitored memory location.
 
 <div class="flush-reload-simulator-launch" id="flush-reload-visualizer" data-fr-ready>
   <noscript>This interactive cache simulator requires JavaScript.</noscript>

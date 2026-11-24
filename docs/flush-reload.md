@@ -61,4 +61,4 @@ int main(void) {
 }
 ```
 
-[Open Cache Quest](../cache-quest.html)
+[Open Cache Quest](cache-quest.html)
