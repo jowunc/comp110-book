@@ -6,8 +6,8 @@ copyright = "Copyright (c) 2026 Kris Jordan and Izzi Hinks"
 docs_dir = "docs"
 site_dir = "site"
 dev_addr = "0.0.0.0:8000"
-extra_css = ["stylesheets/python-runner.css"]
-extra_javascript = ["javascripts/python-runner-loader.js"]
+extra_css = ["stylesheets/python-runner.css", "stylesheets/flush-reload-simulator.css"]
+extra_javascript = ["javascripts/python-runner-loader.js", "javascripts/cache-quest-model.js", "javascripts/flush-reload-simulator.js"]
 nav = [
   {"Reference" = [
     {"Function Fundamentals" = "function_fundamentals.md"},
@@ -19,7 +19,8 @@ nav = [
     ]},
     {"List Fundamentals" = "list-fundamentals.md"},
     {"Unit Testing and Modularity" = "unit-testing.md"},
-    {"Intro to OOP" = "intro-oop.md"},  
+    {"Intro to OOP" = "intro-oop.md"},
+    {"FLUSH+RELOAD Simulator" = "flush-reload-simulator.md"},
   ]},
   {"Practice" = [
     {"Conditional Statements" = "conditional-practice.md"},

@@ -11,7 +11,7 @@ FLUSH+RELOAD is a cache side-channel technique that allows an attacker to infer 
 
 Modern processors use caches to store recently accessed data. Accessing data that is already in the cache is much faster than retrieving the same data from main memory.
 
-FLUSH+RELOAD takes advantage of this timing difference. If an attacker and victim share a memory page, the attacker can monitor a specific memory location and determine whether the victim accessed it.
+FLUSH+RELOAD takes advantage of this timing difference. If an attacker and victim map the same underlying physical memory line, the attacker can monitor a specific memory location and infer whether the victim accessed it.
 
 ## How Does FLUSH+RELOAD Work?
 
@@ -41,39 +41,53 @@ In simplified form:
 
 ## Interactive Example
 
-The example below demonstrates the basic behavior behind FLUSH+RELOAD.
+Enter your hit predictions in the C array (1 for hit, 0 for miss). Run both trials to see your score, then replay the results below. Change the second trial to line 2 and run it again. Both experiments use the lab’s illustrative costs. The C runner executes your edits independently of the visual lab. Try a threshold below 42 and explain why the inference changes even though the latency stays the same.
 
 ```c { runnable=true title="FLUSH+RELOAD Simulation" editable=true }
 #include <stdio.h>
 
 int main(void) {
-    int cached = 0;
-    int victim_accesses = 1;
-
-    // FLUSH
-    cached = 0;
-    printf("1. FLUSH: Cache line removed.\n");
-
-    // VICTIM
-    if (victim_accesses) {
-        cached = 1;
-        printf("2. VICTIM: Victim accesses the memory location.\n");
-    } else {
-        printf("2. VICTIM: Victim does not access the memory location.\n");
+    // Change either trial: 2 selects X and 1 selects Y.
+    const int victim_line[] = {2, 1};
+    const int predict_hit[] = {0, 0};
+    int score = 0;
+    const int threshold = 100;
+    for (int trial = 0; trial < 2; trial++) {
+        int valid[4] = {0, 0, 1, 0};
+        int selected = victim_line[trial];
+        if (selected != 1 && selected != 2) {
+            puts("Choose line 2 (X) or 1 (Y).");
+            return 1;
+        }
+        valid[2] = 0;
+        printf("Trial %d | FLUSH X (+36 simulated cycles)\n", trial + 1);
+        valid[selected] = 1;
+        printf("VICTIM loaded line %d (+32)\n", selected);
+        int latency = valid[2] ? 42 : 186;
+        valid[2] = 1;
+        printf("RELOAD X: %d simulated cycles | total %d\n", latency, 68 + latency);
+        printf("INFER: X was %s accessed.\n\n",
+               latency < threshold ? "likely" : "likely not");
+        int inferred_hit = latency < threshold;
+        int correct = predict_hit[trial] == inferred_hit;
+        score += correct;
+        printf("Prediction: %s\n", correct ? "correct" : "try again");
+        printf("QUEST %c %d %d %s\n", selected == 2 ? 'X' : 'Y',
+               latency, 68 + latency, inferred_hit ? "HIT" : "MISS");
     }
-
-    // RELOAD
-    printf("3. RELOAD: Attacker reloads the memory location.\n");
-
-    // INFER
-    if (cached) {
-        printf("4. RESULT: Fast access (cache hit).\n");
-        printf("   Inference: Victim likely accessed the location.\n");
-    } else {
-        printf("4. RESULT: Slow access (cache miss).\n");
-        printf("   Inference: Victim likely did not access the location.\n");
-    }
-
+    printf("Score: %d of 2\n", score);
     return 0;
 }
 ```
+
+<button type="button" class="flush-reload-launch-card__button" data-c-replay>Compare my C trials with the lab</button>
+<p data-c-trials aria-live="polite"></p>
+
+<div class="flush-reload-launch-card">
+  <div>
+    <span class="flush-reload-launch-card__eyebrow">Interactive Lab</span>
+    <h2>Explore FLUSH+RELOAD visually</h2>
+    <p>Step through cache hits and misses, observe cycle counts, and test an inference in the dedicated Cache Quest-style simulator.</p>
+  </div>
+  <a class="flush-reload-launch-card__button" href="../flush-reload-simulator/">Launch Simulator →</a>
+</div>
