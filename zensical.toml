@@ -1,41 +1,43 @@
 [project]
-site_name = "COMP110"
-site_description = "A Zensical-based static website."
-site_author = "COMP 110"
+site_name = "COMP 495 · Cache Side Channels"
+site_description = "An interactive FLUSH+RELOAD lesson by Justin Owusu."
+site_author = "Justin Owusu"
 copyright = "Copyright (c) 2026 Kris Jordan and Izzi Hinks"
 docs_dir = "docs"
 site_dir = "site"
 dev_addr = "0.0.0.0:8000"
 extra_css = ["stylesheets/python-runner.css", "stylesheets/flush-reload-simulator.css"]
-extra_javascript = ["javascripts/python-runner-loader.js", "javascripts/cache-quest-model.js", "javascripts/flush-reload-simulator.js"]
+extra_javascript = ["javascripts/python-runner-loader.js", "javascripts/cache-quest-model.js", "javascripts/flush-reload-simulator.js", "javascripts/cache-quest-lesson.js"]
 nav = [
-  {"Reference" = [
-    {"Function Fundamentals" = "function_fundamentals.md"},
-    {"Variable Fundamentals" = "variable_fundamentals.md"},
-    {"Control Flow Fundamentals" = [
-      {"If Statements" = "control_flow/if_statements.md"},
-      {"While Loops" = "control_flow/while_loops.md"},
-      {"Composing If and While" = "control_flow/composition.md"},
-    ]},
-    {"List Fundamentals" = "list-fundamentals.md"},
-    {"Unit Testing and Modularity" = "unit-testing.md"},
-    {"Intro to OOP" = "intro-oop.md"},
-    {"FLUSH+RELOAD Simulator" = "flush-reload-simulator.md"},
-  ]},
-  {"Practice" = [
-    {"Conditional Statements" = "conditional-practice.md"},
-    {"Conditionals and Variables" = "conditional-variable-practice.md"},
-    {"while Loops" = "while-practice.md"}, 
-    {"Nested while Loops" = "nested-while-practice.md"},  
-    {"Lists" = [
-      {"List Fundamentals" = "lists/list-fundamentals-practice.md"},
-      {"Lists and while Loops" = "lists/list-while-practice.md"},
-      # {"Lists and for Loops" = "lists/list-for-loop-practice.md"},
-    ]},
-    {"OOP Basics" = "intro-oop-practice.md"},
-  ]},
+  {"Research overview" = "index.md"},
+  {"FLUSH+RELOAD lesson" = "flush-reload.md"},
+  {"Cache Quest" = "cache-quest.html"},
 ]
-
+exclude_docs = """
+about.md
+c-runner.md
+c-terminal-runner.md
+conditional-practice.md
+conditional-variable-practice.md
+control_flow/composition.md
+control_flow/if_statements.md
+control_flow/while_loops.md
+function_fundamentals.md
+intro-oop-practice.md
+intro-oop.md
+list-fundamentals.md
+lists/list-for-loop-practice.md
+lists/list-fundamentals-practice.md
+lists/list-while-practice.md
+nested-while-practice.md
+python-canvas.md
+python-diagram.md
+python-functions.md
+python-pygame.md
+unit-testing.md
+variable_fundamentals.md
+while-practice.md
+"""
 [project.extra]
 generator = false
 

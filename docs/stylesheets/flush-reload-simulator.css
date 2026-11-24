@@ -394,3 +394,57 @@
 @media(max-width:980px){.frq__dashboard{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:700px){.frq__timeline{grid-template-columns:repeat(4,1fr)}.frq__phase{font-size:12px}.frq__workspace{grid-template-columns:1fr minmax(115px,40%) 1fr}.frq__header{flex-wrap:wrap;gap:8px}}
 @media(prefers-reduced-motion:reduce){.frq *::before,.frq *::after{animation:none!important}}
+.quest-back {display:inline-block;color:#86e7ff;font:600 14px system-ui;margin:0 1rem}
+.frq [data-target],.quest-inputs select {color:#edfaff;background:#10213d;border:1px solid #5485a8;border-radius:5px;padding:4px}
+.frq__line.touch-FLUSH {animation:quest-flush .7s ease-out;border-color:#ce8cff}
+.frq__line.touch-VICTIM,.frq__line.touch-RELOAD {animation:quest-load .7s ease-out;border-color:#8af4ff}
+@keyframes quest-flush {from{background:#693690;box-shadow:inset 0 0 18px #d2a0fb}to{background:#111f38}}
+@keyframes quest-load {from{box-shadow:inset 120px 0 #31929d,0 0 16px cyan}to{box-shadow:inset 0 0 transparent}}
+.quest-inputs {display:flex;flex-wrap:wrap;align-items:end;gap:.8rem;margin:1rem 0}
+.quest-inputs label {display:grid;gap:.3rem}
+.quest-records {display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:.55rem}
+.quest-records article {border-left:3px solid #35899e;padding:.65rem;background:#101d36;color:#eaf8ff;border-radius:5px}
+.quest-records article strong {display:block;color:#84eeff}
+
+.quest-walk {background:white;color:#202837;border:1px solid #d9dfe8;border-radius:8px;overflow:hidden;margin:18px 0;font:15px/1.5 system-ui,sans-serif}
+.quest-walk .qw-code {position:relative;overflow:auto;max-height:240px;background:#f5f5f5;padding:12px 0;font:14px/1.7 monospace;color:#314858}
+.qw-code div {white-space:pre;width:max-content;min-width:100%}
+.qw-code span {display:inline-block;width:3em;text-align:right;margin-right:1em;padding-right:.7em;color:#687586;border-right:1px solid #ddd}
+.qw-code .active {background:#d2e7f8;box-shadow:inset 3px 0 #4168c4}
+.qw-tools {display:flex;gap:8px;padding:10px;flex-wrap:wrap}
+.qw-tools button {padding:6px 12px;border:1px solid #ccd2da;border-radius:5px;background:white;color:#172332;cursor:pointer}
+.qw-tools [data-step="1"] {background:#168348;color:white}
+.qw-tools button:disabled {opacity:.4;cursor:default}
+.qw-note {margin:0 10px;padding:8px;background:#fff5c5;border:1px solid #e9cd64;border-radius:5px}
+.qw-panels {display:grid;grid-template-columns:1fr .85fr 1.35fr;gap:10px;background:#f7f9fb;padding:10px}
+.qw-panels section {min-width:0;background:white;border:1px solid #ccd6e6;border-radius:5px;overflow:hidden;min-height:150px}
+.quest-walk .qw-panels h4 {margin:0;padding:7px;background:#edf1ff;color:#263452;font:600 13px system-ui}
+.quest-walk .qw-panels pre {margin:0;padding:9px;white-space:pre-wrap;overflow-wrap:anywhere;background:white;color:#30475a;font:13px/1.6 monospace}
+@media(max-width:600px){.qw-panels{grid-template-columns:1fr}.qw-panels section{min-height:0}}
+
+.quest-walk .qw-code {max-height:none}
+.quest-walk .qw-note[hidden] {display:none}
+.quest-walk .qw-note {background:#eef6ff;border-color:#bdd9f3}
+.quest-walk button:focus-visible {outline:2px solid #405bdb;outline-offset:2px}
+
+.quest-walk .qw-source {display:grid;grid-template-columns:minmax(0,1fr);background:#f5f5f5;align-items:start}
+.quest-walk .qw-code {padding:16px 0}
+.quest-walk .qw-code b {font-weight:500}
+.qw-keyword {color:#3946a3}
+.qw-string {color:#117145}
+.qw-number {color:#a03835}
+.quest-walk .qw-tip {margin:0 12px 12px;padding:12px 14px;border:1px solid #e4c862;background:#fff6c6;border-radius:8px;color:#554308;font:14px/1.45 system-ui}
+.quest-walk .qw-tip p {margin:4px 0 0}
+.quest-walk .qw-tip[hidden] {display:none}
+.quest-walk .qw-tools {border-block:1px solid #e3e7ed}
+.quest-walk .qw-tools button {min-width:40px;min-height:40px}
+.quest-walk .qw-panels pre {margin:8px;border:1px solid transparent;border-radius:5px}
+.quest-walk .qw-panels .qw-frame {background:#ebfaff;border-color:#7cc4d5}
+.quest-walk .qw-panels [data-state="present"] {background:#eefbf2;border-color:#78bb8f}
+.quest-walk .qw-panels [data-state="absent"] {background:#fff4e6;border-color:#dcaf73}
+.quest-walk .qw-result {font-weight:700}
+.quest-walk {container-type:inline-size}
+@container (min-width:800px) {
+  .quest-walk .qw-source {grid-template-columns:minmax(0,1fr) 205px}
+  .quest-walk .qw-tip {margin:16px 12px 0 0}
+}

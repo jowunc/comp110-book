@@ -1,38 +1,9 @@
----
-title: COMP110
-description: Variable, function, and control flow fundamentals resources for COMP 110 at UNC-Chapel Hill.
----
+# Cache side channels
 
-# COMP110
+Justin Owusu · COMP 495 mentored research · UNC–Chapel Hill
 
-This site is a learning resource for **COMP 110: Introduction to Programming** at UNC-Chapel Hill, an introductory course that expects no prior programming experience.
+Can the time it takes to read a memory location tell us whether another program recently used it? This project explores that question through FLUSH+RELOAD.
 
+[Read the FLUSH+RELOAD lesson](flush-reload.md) to follow a shared cache line through a short C example. Then [open Cache Quest](cache-quest.html) to infer a hidden access from its simulated reload time.
 
-## Reference
-
-1. [Function Fundamentals](function_fundamentals.md): Define and call functions, pass arguments, and return results.
-2. [Variable Fundamentals](variable_fundamentals.md): Store and update values, and understand where variables can be used.
-3. Control Flow Fundamentals
-
-    1. [If Statements](control_flow/if_statements.md): Choose which code runs using `if`, `else`, and `elif`.
-    2. [While Loops](control_flow/while_loops.md): Repeat code while a condition is true and control when the loop stops.
-    3. [Composing If and While](control_flow/composition.md): Combine decisions and repetition by nesting conditionals and loops.
-
-4. [List Fundamentals](list-fundamentals.md): Learn how Python lists store many values under one name, how they differ from primitive types, and how loops and functions work with them.
-5. [Unit Testing and Modularity](unit-testing.md): Split a program into modules, import definitions from one file into another, and write pytest unit tests that check a function's behavior.
-6. [Intro to OOP](intro-oop.md): Learn how to define your own types with classes, construct objects, and give those objects behavior with methods. 
-
-
-## Practice
-
-1. [Conditional Statements](conditional-practice.md): Practice one-way, two-way, nested, multiway, and independent conditional decisions.
-2. [Conditionals and Variables](conditional-variable-practice.md): Practice initialization, scope, parameters, return values, and static variables across conditional paths.
-3. [while Loops](while-practice.md): Practice writing counter-controlled and condition-controlled while loops, combining conditions with Boolean operators, composing loops with conditionals, and repairing common loop errors.
-4. [Nested while Loops](nested-while-practice.md): Practice writing counter-controlled and condition-controlled while loops, combining conditions with Boolean operators, composing loops with conditionals, and repairing common loop errors.
-5. Lists
-
-    1. [List Fundamentals](lists/list-fundamentals-practice.md): Practice initializing, accessing, and mutating Python lists (our first reference type!).
-    2. [List and while Loops](lists/list-while-practice.md): Practice using while loops to read, count, search, and build lists, including nested loops over 2D lists.
-    <!-- 3. [List and for Loops](lists/list-for-loop-practice.md): Use for loops to visit every element of a list, and learn when a for loop or a while loop is the better fit. -->
-
-6. [Object-Oriented Programming Basics](intro-oop-practice.md): Trace memory diagrams, write classes and methods, and evaluate code that works with objects.
+A lesson on Spectre is planned next.

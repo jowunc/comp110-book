@@ -65,6 +65,13 @@ class HeaderProxyHandler(http.server.BaseHTTPRequestHandler):
         ))
 
     def do_GET(self) -> None:
+        page, _, query = self.path.partition("?")
+        if page in {"/", "/flush-reload-simulator", "/flush-reload-simulator/"}:
+            self.send_response(302)
+            self.send_header("Location", "/cache-quest.html" + ("?" + query if query else ""))
+            self.send_header("Cache-Control", "no-store")
+            self.end_headers()
+            return
         self.proxy_request()
 
     def do_HEAD(self) -> None:

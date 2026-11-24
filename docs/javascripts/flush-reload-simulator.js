@@ -22,11 +22,11 @@
           <aside class="frq__left">
             <article class="frq__card">
               <span class="frq__card-icon" aria-hidden="true">◎</span>
-              <div><h3>Objective</h3><p>Determine if the victim accessed memory <b>X</b> using cache timing.</p></div>
+              <div><h3>Objective</h3><p>Determine if the victim accessed memory <b data-target-name>X</b> using cache timing.</p></div>
             </article>
             <article class="frq__card frq__controls-card">
               <span class="frq__card-icon" aria-hidden="true">☷</span>
-              <div><h3>Controls</h3><button type="button" data-fr-play><span data-fr-play-icon>▶</span><span data-fr-play-label>Play</span></button><button type="button" data-fr-next><span>»</span>Step Next</button><button type="button" data-fr-prev><span>«</span>Step Prev</button><button type="button" data-fr-reset><span>↻</span>Reset</button></div>
+              <div><h3>Controls</h3><label>Monitor <select data-target><option value="2">X · line 2</option><option value="1">Y · line 1</option></select></label><button type="button" data-fr-play><span data-fr-play-icon>▶</span><span data-fr-play-label>Play</span></button><button type="button" data-fr-next><span>»</span>Step Next</button><button type="button" data-fr-prev><span>«</span>Step Prev</button><button type="button" data-fr-reset><span>↻</span>Reset</button></div>
             </article>
           </aside>
 
@@ -40,7 +40,7 @@
           </section>
 
           <aside class="frq__right">
-            <article class="frq__card"><span class="frq__card-icon" aria-hidden="true">◷</span><div><h3>Reload latency</h3><strong class="frq__value" data-fr-cycles>—</strong><small data-total></small></div></article>
+            <article class="frq__card"><span class="frq__card-icon" aria-hidden="true">◷</span><div><h3>Reload latency</h3><strong class="frq__value" data-fr-cycles>—</strong></div></article>
             <article class="frq__card frq__result"><span class="frq__card-icon" aria-hidden="true">▣</span><div><h3>Result</h3><strong data-fr-result class="frq__result-value">Waiting</strong></div></article>
             <article class="frq__card"><span class="frq__card-icon" aria-hidden="true">◉</span><div><h3>Inference</h3><strong class="frq__inference" data-fr-inference>No inference yet</strong></div></article>
           </aside>
@@ -53,14 +53,14 @@
         </div>
 
         <div class="frq__timing">
-          <div><span>SIMULATED RELOAD TIME</span><strong data-fr-timing>—</strong></div>
-          <div class="frq__scale"><span>0</span><span>300 cycles</span><i></i><b data-fr-marker></b></div>
+          <div><span>TOTAL SIMULATED CPU CYCLES</span><strong data-total>0</strong></div>
+          <div class="frq__scale" aria-label="Reload latency scale"><span>0</span><span>300 cycles</span><i></i><b data-fr-marker></b></div>
           <small data-fr-timing-caption>Educational timing model—not real CPU hardware measurements.</small>
         </div>
       </section>
     `;
 
-    const state = { hit: true, index: 0, steps: trace(true), timer: null };
+    const state = { hit: true, index: 0, target: 2, steps: trace(true), timer: null };
 
     function stop() {
       if (state.timer !== null) window.clearInterval(state.timer);
@@ -73,7 +73,7 @@
     function setHit(hit) {
       stop();
       state.hit = hit;
-      state.steps = trace(hit);
+      state.steps = trace(hit, state.target);
       state.index = 0;
       state.answered = false;
       container.querySelector("[data-feedback]").textContent = "";
@@ -84,20 +84,22 @@
       const step = state.steps[state.index];
       const challenge = container.querySelector("[data-mode]").value === "challenge";
       const blind = challenge && !state.answered;
+      const prompts = ["Start by flushing the monitored line.", "Next, let the victim act.", "The victim chose a location. Reload your monitored line.", "Below 100 cycles suggests a hit. Advance to INFER.", "A hit suggests the monitored location. A miss suggests the other location. Choose the secret bit."];
       container.querySelector(".frq__quiz").hidden = !challenge;
       container.querySelectorAll("[data-bit]").forEach(b => b.disabled = state.index !== 4 || state.answered);
-      container.querySelector("[data-guide]").textContent = (blind && state.index === 2 ? "The victim chose a location. Observe the reload to infer which one." : step.subtitle) + "  +" + step.cost + " simulated cycles";
+      container.querySelector("[data-guide]").textContent = (blind ? prompts[state.index] : step.subtitle) + "  +" + step.cost + " simulated cycles";
       container.querySelector("[data-fr-stage]").textContent = `${state.index ? "Step " + state.index + ": " : ""}${step.title}`;
       container.dataset.phase = step.phase;
       container.querySelector("[data-fr-cycles]").textContent = step.measurement === null ? "—" : step.measurement + " cycles";
-      container.querySelector("[data-total]").textContent = step.cycles + " simulated cycles total";
+      container.querySelector("[data-total]").textContent = step.cycles;
+      container.querySelector("[data-target-name]").textContent = state.target === 2 ? "X" : "Y";
       container.querySelector("[data-fr-inference]").textContent = blind ? "Make your prediction" : step.inference;
 
       const cache = container.querySelector("[data-fr-cache]");
       cache.innerHTML = lines.map((line) => {
         const cached = !blind && Boolean(step.cache[line.id]);
         const monitored = line.monitored ? " <em>X</em>" : line.id === 1 ? " <em>Y</em>" : "";
-        return `<div class="frq__line ${cached ? "is-cached" : ""} ${line.monitored && step.phase === "RELOAD" ? "is-pulse" : ""}"><span>${line.label}${monitored}</span><b>${blind ? "?" : cached ? "✓" : "–"}</b></div>`;
+        return `<div class="frq__line ${cached ? "is-cached" : ""} ${(!blind || step.phase !== "VICTIM") && line.id === step.touched ? "touch-" + step.phase : ""}"><span>${line.label}${monitored}</span><b>${blind ? "?" : cached ? "✓" : "–"}</b></div>`;
       }).join("");
 
       const result = container.querySelector("[data-fr-result]");
@@ -119,16 +121,16 @@
       container.querySelector("[data-fr-prev]").disabled = state.index === 0;
       container.querySelector("[data-fr-next]").disabled = state.index === state.steps.length - 1;
 
-      const timing = container.querySelector("[data-fr-timing]");
+
       const marker = container.querySelector("[data-fr-marker]");
       const caption = container.querySelector("[data-fr-timing-caption]");
       if (step.measurement) {
-        timing.textContent = `${step.measurement} cycles`;
+
         marker.style.left = `${Math.min(100, step.measurement / 3)}%`;
         marker.className = step.result;
         caption.textContent = step.result === "hit" ? "Below the 100-cycle threshold: cache HIT" : "Above the 100-cycle threshold: cache MISS";
       } else {
-        timing.textContent = "—";
+
         marker.style.left = "0%";
         marker.className = "";
         caption.textContent = "Educational timing model—not real CPU hardware measurements.";
@@ -141,13 +143,18 @@
     container.querySelectorAll("[data-fr-phase-index]").forEach((button) => button.addEventListener("click", () => { stop(); state.index = 1 + Number(button.dataset.frPhaseIndex); render(); }));
 
     const mode = container.querySelector("[data-mode]");
-    function newRound() { setHit(mode.value === "challenge" ? Math.random() < 0.5 : mode.value === "hit"); }
+    const target = container.querySelector("[data-target]");
+    target.addEventListener("change", () => {
+      state.target = Number(target.value);
+      setHit(state.hit);
+    });
+    function newRound() { target.disabled = mode.value === "challenge"; setHit(mode.value === "challenge" ? Math.random() < 0.5 : mode.value === "hit"); }
     mode.addEventListener("change", newRound);
     container.querySelector("[data-round]").addEventListener("click", newRound);
     container.querySelectorAll("[data-bit]").forEach(button => button.addEventListener("click", () => {
       state.answered = true;
       const correct = Number(button.dataset.bit) === Number(state.hit);
-      container.querySelector("[data-feedback]").textContent = (correct ? "Correct. " : "Try another round. ") + (state.hit ? "42 cycles suggests X, so the bit was 1." : "186 cycles suggests Y, so the bit was 0.");
+      container.querySelector("[data-feedback]").textContent = (correct ? "Correct. " : "Try another round. ") + state.steps[3].measurement + " cycles is a " + state.steps[3].result + " on the monitored line. " + (state.hit ? "The victim chose X, so the bit was 1." : "The victim chose Y, so the bit was 0.");
       render();
     }));
     container.querySelector("[data-fr-play]").addEventListener("click", () => {
@@ -164,6 +171,12 @@
       }, 900);
     });
 
+    const params = new URLSearchParams(location.search);
+    if (params.get("monitor") === "Y") {
+      target.value = "1";
+      state.target = 1;
+      setHit(state.hit);
+    }
     if (location.hash === "#trial-x" || location.hash === "#trial-y") {
       mode.value = location.hash === "#trial-x" ? "hit" : "miss";
       setHit(mode.value === "hit");
@@ -173,28 +186,6 @@
   }
 
   function boot() {
-    const replay = document.querySelector("[data-c-replay]");
-    if (replay && !replay.dataset.ready) {
-      replay.dataset.ready = "true";
-      replay.addEventListener("click", () => {
-        const output = document.querySelector(".python-runner__output")?.textContent || "";
-        const trials = [...output.matchAll(/^QUEST ([XY]) (\d+) (\d+) (HIT|MISS)$/gm)];
-        const list = document.querySelector("[data-c-trials]");
-        list.replaceChildren();
-        if (!trials.length) list.textContent = "Run the C experiment first to generate trial records.";
-        for (const [, location, latency, total, classification] of trials) {
-          const step = trace(location === "X")[3];
-          if (+latency !== step.measurement || +total !== step.cycles || classification !== step.result.toUpperCase()) {
-            list.append("This trial uses different timing settings from the visual lab. ");
-            continue;
-          }
-          const link = document.createElement("a");
-          link.href = "../cache-quest.html#trial-" + location.toLowerCase();
-          link.textContent = "Replay " + location + " · " + latency + " cycles";
-          list.append(link, " ");
-        }
-      });
-    }
     document.querySelectorAll("#flush-reload-visualizer[data-fr-ready]").forEach(initialize);
   }
   document.addEventListener("DOMContentLoaded", boot);
